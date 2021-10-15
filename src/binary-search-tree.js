@@ -1,6 +1,6 @@
 const { NotImplementedError } = require('../extensions/index.js');
 
-// const { Node } = require('../extensions/list-tree.js');
+const { Node } = require('../extensions/list-tree.js');
 
 /**
 * Implement simple binary search tree according to task description
@@ -8,38 +8,104 @@ const { NotImplementedError } = require('../extensions/index.js');
 */
 module.exports = class BinarySearchTree {
 
+  constructor() {
+    this.firstNode = null;
+  }
   root() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    return this.firstNode;
   }
 
-  add(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  add(data) {
+    this.firstNode = addNode(this.firstNode, data);
+    function addNode (node,data) {
+      // Если нода не существует, то добавить новый нод с числом data
+      if (!node) {
+        return new Node(data)
+      }
+      // Если значения нода равно значению data, то просто вывести значение данного нода
+      if (node.data === data) {
+        return node.data
+      }
+      //Если значение data меньше значения текущего нода, то отправить значение data в лево и повторить функцию addNode
+      //Если значение data больше значения текущего нода, то отправить значение data в право и повторить функцию addNode
+      if (data < node.data) {
+        node.left = addNode (node.left,data)
+      } else {
+        node.right = addNode (node.right,data)
+      }
+      return node
+    }
   }
 
-  has(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  has(data) {
+    return searchNode (this.firstNode, data)
+
+    function searchNode (node, data) {
+      // Если нода не существует, то вернуть false
+      if (!node) {
+        return false
+      }
+      // Если значение нода равно значению date, то вернуть true
+      if (node.data === data) {
+        return true
+      }
+      // Если значение data меньше значения нода, то определить data в левую ветку и заново провести поиск
+      // Если значение data больше значения нода, то определить data в правую ветку и заново провести поиск
+      return data < node.data ?
+      searchNode(node.left, data) :
+      searchNode(node.right, data);
+    }
   }
 
-  find(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  find(data) {
+    return findNode(this.firstNode, data);
+    function findNode(node, data) {
+      // Если нода не существует, то вернуть null (как сказанно в задаче/ условие)
+      if (!node) {
+        return null;
+      }
+      // Если значение нода равно значению date, то вернуть значение нода
+      if (node.data == data) {
+        return node;
+      }
+      // Если значение data меньше значения нода, то определить data в левую ветку и заново провести поиск
+      // Если значение data больше значения нода, то определить data в правую ветку и заново провести поиск
+      return data < node.data ?
+      findNode(node.left, data) :
+      findNode(node.right, data);
+    }
   }
+
   remove(/* data */) {
     throw new NotImplementedError('Not implemented');
     // remove line with error and write your code here
   }
 
   min() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+
+    if (!this.firstNode) {
+      return 
+    }
+    // Просто постоянно переходим на левые ветки пока они не закончатся
+    let node = this.firstNode
+    while (node.left) {
+      node = node.left;
+    }
+    // Когда ветки закончились, то выводим текущее значение
+    return node.data
   }
 
   max() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    if (!this.firstNode) {
+      return 
+    }
+    // Просто постоянно переходим на правые ветки пока они не закончатся
+    let node = this.firstNode
+    while (node.right) {
+      node = node.right;
+    }
+    // Когда ветки закончились, то выводим текущее значение
+    return node.data
   }
 
 }
